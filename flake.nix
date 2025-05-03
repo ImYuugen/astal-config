@@ -37,6 +37,7 @@
     };
     devShells.${system}.default = pkgs.mkShell {
       buildInputs = with pkgs; [
+        typescript
         nodePackages_latest.typescript-language-server
         nodePackages_latest.prettier
         dart-sass
