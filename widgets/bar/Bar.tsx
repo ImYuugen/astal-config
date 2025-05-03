@@ -1,11 +1,16 @@
 import { Astal, Gdk } from "astal/gtk3";
+import DatetimeBarModule from "./modules/Datetime";
 
 function BarLeft() {
     return <box className="box-left"></box>;
 }
 
 function BarCenter() {
-    return <box className="box-center"></box>;
+    return (
+        <box className="box-center">
+            <DatetimeBarModule />
+        </box>
+    );
 }
 
 function BarRight() {
