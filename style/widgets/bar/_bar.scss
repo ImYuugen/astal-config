@@ -1,0 +1,5 @@
+@use "../../themes/theme-current" as theme;
+
+window.top-bar {
+    background: theme.$color1;
+}
