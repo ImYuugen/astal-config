@@ -1,24 +1,25 @@
-import { Variable, GLib } from "astal";
+import GLib from "gi://GLib";
+import { Poll } from "ags/state";
 
 export default function DatetimeBarModule() {
-    const time = Variable(GLib.DateTime.new_now_local()).poll(1000, () =>
+    const time = new Poll(GLib.DateTime.new_now_local(), 1000, (_) =>
         GLib.DateTime.new_now_local(),
     );
     const dayKanji = ["", "月", "火", "水", "木", "金", "土", "日"];
 
     return (
-        <box className="datetime-module">
+        <box class="datetime-module">
             <label
-                className="day-kanji"
+                class="day-kanji"
                 label={time((t) => dayKanji[+(t.format("%u") ?? 0)])}
             />
-            <box className="date-time">
+            <box class="date-time">
                 <label
-                    className="time"
+                    class="time"
                     label={time((t) => t.format("%R") ?? "??:??")}
                 />
                 <label
-                    className="date"
+                    class="date"
                     label={time((t) => t.format("%d/%m") ?? "??/??")}
                 />
             </box>

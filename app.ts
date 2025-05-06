@@ -1,11 +1,12 @@
-import { App } from "astal/gtk3";
+import app from "ags/gtk4/app";
 import Bar from "./widgets/bar/Bar.tsx";
 import Styling from "./utils/style.ts";
 
 function main() {
-    // Load default theme
     Styling.tryLoadTheme()
-        .then(() => App.get_monitors().map(Bar))
+        .then(() => {
+            app.get_monitors().map(Bar);
+        })
         .catch(printerr);
 }
 
@@ -24,8 +25,7 @@ function requestHandler(request: string, res: (response: any) => void) {
     }
 }
 
-App.start({
-    css: "/tmp/ags-style.css",
+app.start({
     requestHandler,
     main,
 });

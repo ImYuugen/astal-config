@@ -3,46 +3,64 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    astal = {
-      url = "github:aylur/astal";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     ags = {
-      url = "github:aylur/ags";
+      url = "github:aylur/ags/v3";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, astal, ags }: let
+  outputs = { self, nixpkgs, ags }: let
     system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
+    pkgs = import nixpkgs { inherit system; };
+    pname = "astal-shell";
+    entry = ./app.ts;
+
+    astalPackages = with ags.packages.${system}; [
+      io
+      astal4
+    ];
+
+    extraPackages =
+      astalPackages
+      ++ [
+        pkgs.libadwaita
+        pkgs.libsoup_3
+      ];
   in {
-    packages.${system}.default = pkgs.stdenvNoCC.mkDerivation rec {
-      name = "my-shell";
+    packages.${system}.default = pkgs.stdenvNoCC.mkDerivation {
+      name = pname;
       src = ./.;
 
-      nativeBuildInputs = [
+      nativeBuildInputs = with pkgs; [
+        wrapGAppsHook
+        gobject-introspection
         ags.packages.${system}.default
-        pkgs.wrapGAppsHook
-        pkgs.gobject-introspection
       ];
 
-      buildInputs = with astal.packages.${system}; [
-      ];
+      buildInputs = extraPackages ++ [pkgs.gjs];
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/bin
-        ags bundle app.ts $out/bin/${name}
+        mkdir -p $out/share
+        cp -r * $out/share
+        ags bundle ${entry} $out/bin/${pname} -d "SRC='$out/share'"
+
+        runHook postInstall
       '';
     };
+
     devShells.${system}.default = pkgs.mkShell {
       buildInputs = with pkgs; [
+        (ags.packages.${system}.default.override {
+          inherit extraPackages;
+        })
         typescript
         nodePackages_latest.typescript-language-server
         nodePackages_latest.prettier
         dart-sass
         vscode-langservers-extracted
-        ags.packages.${system}.agsFull
       ];
     };
   };

@@ -9,7 +9,7 @@
         // "checkJs": true,
         // "allowJs": true,
         "jsx": "react-jsx",
-        "jsxImportSource": "astal/gtk3",
+        "jsxImportSource": "ags/gtk4",
         "allowImportingTsExtensions": true
     }
 }
