@@ -1,6 +1,11 @@
 @use "../../themes/theme-current" as theme;
+@use "modules/datetime";
 @use "modules/battery";
 
 window.bar-top {
-    background: theme.$background;
+    background-color: theme.$background;
+
+    .bar-module {
+        background-color: theme.$bg1;
+    }
 }

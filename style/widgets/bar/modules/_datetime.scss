@@ -1,0 +1,13 @@
+@use "../../../themes/_theme-current.scss" as theme;
+
+.datetime-module {
+    .time {
+        border: teal 1px solid;
+    }
+    .date {
+        border: green 1px solid;
+    }
+    .day-kanji {
+        border: cyan 1px solid;
+    }
+}
