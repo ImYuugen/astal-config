@@ -1,5 +1,6 @@
 @use "../../themes/theme-current" as theme;
+@use "modules/battery";
 
 window.bar-top {
-    background: theme.$color1;
+    background: theme.$background;
 }

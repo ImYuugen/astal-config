@@ -16,8 +16,10 @@
     entry = ./app.ts;
 
     astalPackages = with ags.packages.${system}; [
-      io
       astal4
+      battery
+      powerprofiles
+      io
     ];
 
     extraPackages =
@@ -57,8 +59,8 @@
           inherit extraPackages;
         })
         typescript
-        nodePackages_latest.typescript-language-server
-        nodePackages_latest.prettier
+        typescript-language-server
+        prettierd
         dart-sass
         vscode-langservers-extracted
       ];

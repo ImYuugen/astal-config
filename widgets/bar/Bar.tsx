@@ -1,4 +1,5 @@
 import { Astal, Gdk } from "ags/gtk4";
+import Battery from "./modules/Battery";
 import DatetimeBarModule from "./modules/Datetime";
 import app from "ags/gtk4/app";
 
@@ -15,7 +16,11 @@ function BarCenter() {
 }
 
 function BarRight() {
-    return <box class="box-right"></box>;
+    return (
+        <box class="box-right">
+            <Battery />
+        </box>
+    );
 }
 
 export default function Bar(gdkmonitor: Gdk.Monitor) {

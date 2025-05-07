@@ -3,6 +3,9 @@ import Bar from "./widgets/bar/Bar.tsx";
 import Styling from "./utils/style.ts";
 
 function main() {
+    // Self defined icons
+    app.add_icons("./assets/icons");
+
     Styling.tryLoadTheme()
         .then(() => {
             app.get_monitors().map(Bar);
