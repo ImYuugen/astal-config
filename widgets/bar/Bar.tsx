@@ -1,5 +1,5 @@
 import { Astal, Gdk } from "ags/gtk4";
-import Battery from "./modules/Battery";
+import BatteryBarModule from "./modules/Battery";
 import DatetimeBarModule from "./modules/Datetime";
 import HyprlandBarModule from "./modules/Hyprland";
 import app from "ags/gtk4/app";
@@ -23,7 +23,7 @@ function BarCenter() {
 function BarRight() {
     return (
         <box class="box-right">
-            <Battery />
+            <BatteryBarModule />
         </box>
     );
 }

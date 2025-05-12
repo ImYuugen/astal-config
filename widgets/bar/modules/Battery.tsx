@@ -7,7 +7,7 @@
 import AstalBattery from "gi://AstalBattery";
 import { bind } from "ags/state";
 
-export default function () {
+export default function BatteryBarModule() {
     const battery = AstalBattery.get_default();
 
     const percentage = bind(battery, "percentage");
