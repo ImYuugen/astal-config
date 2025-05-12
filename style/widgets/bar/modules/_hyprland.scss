@@ -1,0 +1,9 @@
+@use "../../../themes/_theme-current.scss" as theme;
+
+.workspaces-module {
+    border: 1px solid red;
+
+    .focused {
+        background-color: gray;
+    }
+}

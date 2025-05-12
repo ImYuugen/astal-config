@@ -1,6 +1,7 @@
 @use "../../themes/theme-current" as theme;
-@use "modules/datetime";
 @use "modules/battery";
+@use "modules/datetime";
+@use "modules/hyprland";
 
 window.bar-top {
     background-color: theme.$background;

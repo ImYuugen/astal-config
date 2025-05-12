@@ -18,6 +18,7 @@
     astalPackages = with ags.packages.${system}; [
       astal4
       battery
+      hyprland
       powerprofiles
       io
     ];
