@@ -9,62 +9,67 @@
     };
   };
 
-  outputs = { self, nixpkgs, ags }: let
-    system = "x86_64-linux";
-    pkgs = import nixpkgs { inherit system; };
-    pname = "astal-shell";
-    entry = ./app.ts;
+  outputs =
+    {
+      self,
+      nixpkgs,
+      ags,
+    }:
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs { inherit system; };
+      pname = "astal-shell";
+      entry = ./app.ts;
 
-    astalPackages = with ags.packages.${system}; [
-      astal4
-      battery
-      hyprland
-      powerprofiles
-      io
-    ];
+      astalPackages = with ags.packages.${system}; [
+        astal4
+        battery
+        hyprland
+        powerprofiles
+        io
+      ];
 
-    extraPackages =
-      astalPackages
-      ++ [
+      extraPackages = astalPackages ++ [
         pkgs.libadwaita
         pkgs.libsoup_3
       ];
-  in {
-    packages.${system}.default = pkgs.stdenvNoCC.mkDerivation {
-      name = pname;
-      src = ./.;
+    in
+    {
+      packages.${system}.default = pkgs.stdenvNoCC.mkDerivation {
+        name = pname;
+        src = ./.;
 
-      nativeBuildInputs = with pkgs; [
-        wrapGAppsHook
-        gobject-introspection
-        ags.packages.${system}.default
-      ];
+        nativeBuildInputs = with pkgs; [
+          wrapGAppsHook
+          gobject-introspection
+          ags.packages.${system}.default
+        ];
 
-      buildInputs = extraPackages ++ [pkgs.gjs];
+        buildInputs = extraPackages ++ [ pkgs.gjs ];
 
-      installPhase = ''
-        runHook preInstall
+        installPhase = ''
+          runHook preInstall
 
-        mkdir -p $out/bin
-        mkdir -p $out/share
-        cp -r * $out/share
-        ags bundle ${entry} $out/bin/${pname} -d "SRC='$out/share'"
+          mkdir -p $out/bin
+          mkdir -p $out/share
+          cp -r * $out/share
+          ags bundle ${entry} $out/bin/${pname} -d "SRC='$out/share'"
 
-        runHook postInstall
-      '';
+          runHook postInstall
+        '';
+      };
+
+      devShells.${system}.default = pkgs.mkShell {
+        buildInputs = with pkgs; [
+          (ags.packages.${system}.default.override {
+            inherit extraPackages;
+          })
+          typescript
+          typescript-language-server
+          prettierd
+          dart-sass
+          vscode-langservers-extracted
+        ];
+      };
     };
-
-    devShells.${system}.default = pkgs.mkShell {
-      buildInputs = with pkgs; [
-        (ags.packages.${system}.default.override {
-          inherit extraPackages;
-        })
-        typescript
-        typescript-language-server
-        prettierd
-        dart-sass
-        vscode-langservers-extracted
-      ];
-    };
-  };
 }
