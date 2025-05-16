@@ -4,7 +4,7 @@ import Styling from "./utils/style.ts";
 
 function main() {
     // Self defined icons
-    app.add_icons("./assets/icons");
+    app.add_icons("./assets/icons/sketchy-app-svg");
 
     Styling.tryLoadTheme()
         .then(() => {

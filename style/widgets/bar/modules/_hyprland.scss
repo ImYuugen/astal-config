@@ -3,6 +3,15 @@
 .workspaces-module {
     border: 1px solid red;
 
+    .workspace {
+        // U R D L
+        .workspace-id {
+            margin-right: 10px;
+        }
+        .workspace-apps > * {
+            margin: 0px 2px;
+        }
+    }
     .focused {
         background-color: gray;
     }

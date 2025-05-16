@@ -7,12 +7,56 @@
 
 import AstalHyprland from "gi://AstalHyprland";
 import { bind } from "ags/state";
-import { For } from "ags/gtk4";
+import { For, Gtk } from "ags/gtk4";
+import { simplifyWindowClass, toSketchyLigature } from "../../../utils/icons";
 
-// TODO: Get apps symbolic svg's and show them
+const gtk_theme = new Gtk.IconTheme();
 
 function workspaceApps(ws: AstalHyprland.Workspace) {
-    return <box>{ws?.id}</box>;
+    // Overlay with faded apps behind and number in foreground
+    return (
+        <box class="workspace-apps">
+            <For each={bind(ws, "clients")}>
+                {(client) => {
+                    // Try to find a corresponding svg
+                    const sketchy_icon = toSketchyLigature(client.class);
+                    if (sketchy_icon !== ":default:") {
+                        return (
+                            <image
+                                class="sketchy-app-icon app-icon"
+                                iconName={sketchy_icon}
+                            />
+                        );
+                    }
+                    // Check if a GTK icon exists
+                    if (gtk_theme.has_icon(client.class)) {
+                        return (
+                            <image
+                                class="gtk-app-icon app-icon"
+                                iconName={client.class}
+                            />
+                        );
+                    }
+                    const simplified_class = simplifyWindowClass(client.class);
+                    if (gtk_theme.has_icon(simplified_class)) {
+                        return (
+                            <image
+                                class="gtk-app-icon app-icon"
+                                iconName={simplified_class}
+                            />
+                        );
+                    }
+                    // Default
+                    return (
+                        <image
+                            class="sketchy-app-icon app-icon"
+                            iconName={sketchy_icon}
+                        />
+                    );
+                }}
+            </For>
+        </box>
+    );
 }
 
 export default function HyprlandBarModule() {
@@ -38,7 +82,13 @@ export default function HyprlandBarModule() {
                             )}
                             $clicked={() => ws.focus()}
                         >
-                            {workspaceApps(ws)}
+                            <box class="workspace">
+                                <label
+                                    class="workspace-id"
+                                    label={`${ws.id}`}
+                                />
+                                {workspaceApps(ws)}
+                            </box>
                         </button>
                     );
                 }}
